@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Join Us</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+
+  </head>
+  <body>
+    <div class="element-join-us">
+      <div class="navigation"></div>
+      <div class="section">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Join Us</div>
+        </div>
+        <div class="request-description">
+          <p class="description-text">
+            Please fill out the application form below to apply for official membership in the YZAK club. Share your skills and experiences to help us understand how you can contribute to our mission. Your application will be reviewed by our team, and we will get back to you soon!
+          </p>
+        </div>
+        <div class="form">
+          <div class="request-form">
+            <div class="form-fields">
+              <input class="input" type="text" name="fullName" placeholder="Full Name" required />
+              <input class="input" type="email" name="email" placeholder="Email" required />
+              <input class="input" type="password" name="password" placeholder="Password" required />
+              <select class="input" name="role" required>
+                <option value="" disabled selected>Please select your preferred role</option>
+                <option value="member">Member</option>
+                <option value="volunteer">Volunteer</option>
+              </select>
+              <textarea class="input-message" name="contribution" placeholder="How would you contribute to YZAK? Please type here.." required></textarea>
+              <button class="button" type="submit">
+                <div class="text-wrapper-5">Submit</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.querySelector('.button').addEventListener('click', async (event) => {
+        event.preventDefault();
+      
+        const fullName = document.querySelector('input[name="fullName"]').value;
+        const email = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+        const role = document.querySelector('select[name="role"]').value;
+        const contribution = document.querySelector('textarea[name="contribution"]').value;
+      
+        if (!fullName || !email || !password || !role || !contribution) {
+          alert('Please fill out all fields.');
+          return;
+        }
+      
+        const data = { fullName, email, password, role, contribution };
+      
+        try {
+          const response = await fetch('http://localhost:3000/join-us', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+      
+          const result = await response.json(); // Parse the response body as JSON.
+      
+          if (response.ok) {
+            alert('Your application has been submitted successfully!');
+            document.querySelector('input[name="fullName"]').value = '';
+            document.querySelector('input[name="email"]').value = '';
+            document.querySelector('input[name="password"]').value = '';
+            document.querySelector('select[name="role"]').value = '';
+            document.querySelector('textarea[name="contribution"]').value = '';
+          } else {
+            alert(`Error: ${result.error || 'Unknown error occurred.'}`);
+          }
+        } catch (error) {
+          alert('An error occurred while submitting your application. Please try again.');
+          console.error(error);
+        }
+      });
+          </script>
+    
+  </body>
+</html>

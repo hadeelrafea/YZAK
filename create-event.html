@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Event</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <script src="navbar.js" defer></script>
+  </head>
+  <body>
+    <div class="element-request-form">
+      <div class="navigation"></div>
+      <div class="section">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Create Event</div>
+        </div>
+        <div class="form">
+          <div class="form-fields-wrapper">
+            <div class="form-fields">
+              <div class="input-group">
+                <input id="eventTitle" class="input" placeholder="Event title" />
+                <input id="subtitle" class="input" placeholder="Subtitle" />
+                <input id="dateTime" class="input" placeholder="Select date and time" />
+                <input id="location" class="input" placeholder="Location" />
+                <textarea id="description" class="input-message" placeholder="Description"></textarea>
+              </div>
+              <button id="submitButton" class="button">
+                <div class="text-wrapper-5">Submit</div>
+              </button>
+              <button id="cancelButton" class="cancel-button">
+                <div class="text-wrapper-5">Cancel</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // Initialize Flatpickr with 24-hour format
+      document.addEventListener("DOMContentLoaded", () => {
+        flatpickr("#dateTime", {
+          enableTime: true,
+          dateFormat: "d/m/Y H:i", // 24-hour format
+          time_24hr: true,
+        });
+      });
+
+      // Function to parse date-time to ISO format
+      function parseDateTimeToISO(dateTimeString) {
+        const [datePart, timePart] = dateTimeString.split(" ");
+        const [day, month, year] = datePart.split("/").map(Number);
+        const [hours, minutes] = timePart.split(":").map(Number);
+
+        // Create a Date object in local time
+        const date = new Date(year, month - 1, day, hours, minutes);
+
+        // Return the ISO string (UTC time)
+        return date.toISOString();
+      }
+
+      // Submit new event data
+      document.getElementById("submitButton").addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById("eventTitle").value.trim();
+        const subtitle = document.getElementById("subtitle").value.trim();
+        const dateTime = document.getElementById("dateTime").value.trim();
+        const location = document.getElementById("location").value.trim();
+        const description = document.getElementById("description").value.trim();
+
+        // Validation: Check if all fields are filled
+        if (!title || !subtitle || !dateTime || !location || !description) {
+          alert("Please fill out all fields.");
+          return;
+        }
+
+        try {
+          // Convert dateTime to ISO format
+          const isoDateTime = parseDateTimeToISO(dateTime);
+
+          const response = await fetch("http://localhost:3000/api/events", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              subtitle,
+              dateTime: isoDateTime,
+              location,
+              description,
+            }),
+          });
+
+          if (response.ok) {
+            alert("Event created successfully!");
+            window.location.href = "event-leader.html"; // Redirect to the events page
+          } else {
+            alert("Failed to create event.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred while creating the event.");
+        }
+      });
+
+      // Cancel button functionality
+      document.getElementById("cancelButton").addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "event-leader.html"; // Redirect to the events page
+      });
+    </script>
+
+  </body>
+</html>

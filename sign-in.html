@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sign In</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+
+  </head>
+  <body>
+    <div class="sign-in-page">
+      <div class="navigation"></div>
+      
+      <div class="section">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Sign In</div>
+        </div>
+        
+        <div class="form">
+          <div class="form-fields-wrapper">
+            <div class="form-fields">
+              <div class="input-group">
+                <input class="input" placeholder="Email" type="email" required />
+                <input class="input" placeholder="Password" type="password" required />
+              </div>
+              <button class="button">
+                <div class="text-wrapper-5">Submit</div>
+              </button>
+            </div>
+          </div>
+          
+          <div class="account-prompt-wrapper">
+            <p class="account-prompt">
+              <span class="account-prompt-text">Don’t have an account yet? </span>
+              <a href="join-us.html" class="join-us-link">Join Us!</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.querySelector('.button').addEventListener('click', async (event) => {
+        event.preventDefault();
+    
+        // Normalize the email to lowercase
+        const email = document.querySelector('input[placeholder="Email"]').value.trim().toLowerCase();
+        const password = document.querySelector('input[placeholder="Password"]').value;
+    
+        if (!email || !password) {
+          alert('Please fill out both email and password.');
+          return;
+        }
+    
+        try {
+          const response = await fetch('http://localhost:3000/signin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            const { role, email: userEmail } = data;
+    
+            // Store role and email in sessionStorage
+            sessionStorage.setItem('userRole', role);
+            sessionStorage.setItem('userEmail', userEmail);
+    
+            // Redirect to the index page or reload to reflect the new state
+            alert(`Welcome, ${role.charAt(0).toUpperCase() + role.slice(1)}!`);
+            window.location.href = 'index.html'; // Redirect to the homepage
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.error}`);
+          }
+        } catch (error) {
+          alert('An error occurred. Please try again.');
+          console.error(error);
+        }
+      });
+    </script>
+    
+    
+  </body>
+</html>

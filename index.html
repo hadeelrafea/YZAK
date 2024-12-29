@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YZAK</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+  </head>
+  <body>
+    <div class="element-about-page">
+      <div class="navigation">
+        
+      </div>
+
+      <!-- ========== ABOUT HEADER ========== -->
+      <div class="about-header">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Welcome to YZAK</div>
+        </div>
+        <div class="about-header-2"></div>
+        <div class="about-header-3">
+          <div class="persona">
+            <div class="image">
+              <img class="IMG" src="IMG-9476.png" alt="Persona Image"/>
+            </div>
+          </div>
+          <p class="p">
+            <span class="span"
+              >At YZAK, we are driven by a commitment to community and service. We invite you to explore our mission
+              and vision to see how together, we can make a lasting impact on the community and beyond. Here’s how we
+              envision our role and our goals in fostering a culture of volunteerism and charity:<br
+            /></span>
+            <span class="text-wrapper-3"><br />Our Mission:<br /></span>
+            <span class="text-wrapper-4"
+              >Represent the youth of Bahrain in the field of charitable contributions with the Bahrain trust
+              foundation in all their various events and objectives.<br /><br
+            /></span>
+            <span class="text-wrapper-3">Our Vision:</span>
+            <span class="text-wrapper-4"
+              >To become the leading youth team in the field of volunteering in the kingdom of Bahrain.
+            </span>
+          </p>
+        </div>
+        <a href="join-us.html">
+          <button class="button">
+            <div class="text-wrapper-5">Join us!</div>
+          </button>
+        </a>
+      </div>
+
+      <!-- ========== BODY (ACHIEVEMENTS) ========== -->
+<div class="body">
+  <div class="body-text">
+    <div class="text">
+      <div class="title">Our Achievements</div>
+      <div class="body-text-2">
+        <div class="colored-text">
+          <p class="paragraph">
+            At YZAK, we’re proud of the impact our volunteers and supporters have made.
+            Here’s a look at what we’ve accomplished together:
+          </p>
+        </div>
+
+        <div class="achievements-row">
+          <!-- Achievement 1 -->
+          <div class="achievement">
+            <img
+              class="time-management"
+              src="time-management.png"
+              alt="Time Management"
+            />
+            <p class="achievement-text">10,000 Hours of Volunteering</p>
+          </div>
+          <!-- Achievement 2 -->
+          <div class="achievement">
+            <img
+              class="img"
+              src="group.png"
+              alt="Group"
+            />
+            <p class="achievement-text">500 Volunteers</p>
+          </div>
+          <!-- Achievement 3 -->
+          <div class="achievement">
+            <img
+              class="gift"
+              src="gift.png"
+              alt="Gift"
+            />
+            <p class="achievement-text">Over 8,000 Meals and Gifts Distributed</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+      
+
+ <!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="footer-info">
+    <!-- The two-column layout, as before -->
+    <div class="footer-info-2">
+      <!-- Left column: “What should we do next?” text -->
+      <div class="contact-info">
+        <div class="div-2">
+          <p class="text-wrapper-6">What should we do next?</p>
+          <p class="text-wrapper-7">
+            We value your innovative thoughts and contributions! If you have a 
+            great idea for an event or initiative, please share it with us. 
+            Fill out the form below to submit your suggestion. Together, we 
+            can make a meaningful difference in our community.
+          </p>
+          <div class="icons-row">
+            <div class="social-icons">
+              <a
+                href="https://www.instagram.com/yzak.bh?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img class="nstagram" src="nstagram.png" alt="Instagram" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@yzak.bh?_t=8rTjEJ2rHdp&_r=1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="behance">
+                  <img class="tik-tok" src="tik-tok.png" alt="TikTok" />
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: form fields + Submit button -->
+      <div class="div-2">
+        <div class="text-fields">
+          <input class="text-input-desktop" placeholder="Name" />
+          <input class="text-input-desktop" placeholder="Email" type="email" required/>
+          <textarea
+              class="write-something"
+              placeholder="Share your idea with us here..."
+            ></textarea>
+          
+        </div>
+        <button class="button-2">
+          <div class="text-wrapper-5">Submit</div>
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+    <script>
+      document.querySelector('.button-2').addEventListener('click', async () => {
+        const nameInput = document.querySelector('input[placeholder="Name"]');
+        const emailInput = document.querySelector('input[placeholder="Email"]');
+        const ideaInput = document.querySelector('textarea[placeholder="Share your idea with us here..."]');
+
+        const fullName = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        const idea = ideaInput.value.trim();
+
+        // Regular expression to validate full name
+        const fullNameRegex = /^[A-Za-z]+\s[A-Za-z]+(\s[A-Za-z]+)*$/;
+
+        if (!fullName || !email || !idea) {
+          alert("All fields are required. Please fill them out before submitting.");
+          return;
+        }
+
+        if (!emailInput.checkValidity()) {
+          alert("Please enter a valid email address.");
+          return;
+        }
+
+        if (!fullNameRegex.test(fullName)) {
+          alert(
+            "Please enter a valid full name. It should contain at least two words and must not include numbers or special characters."
+          );
+          return;
+        }
+
+        try {
+          const response = await fetch('http://localhost:3000/submit-idea', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ fullName, email, idea }),
+          });
+
+          const result = await response.json();
+          alert(result.message || 'Idea submitted successfully!');
+
+          // Clear input fields
+          nameInput.value = '';
+          emailInput.value = '';
+          ideaInput.value = '';
+        } catch (error) {
+          console.error("Error submitting idea:", error);
+          alert("Failed to submit idea.");
+        }
+      });
+
+    </script>
+  </body>
+</html>

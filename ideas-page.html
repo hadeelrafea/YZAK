@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styleguide.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+
+  </head>
+  <body>
+    <div class="element-ideas-page">
+      <div class="navigation"></div>
+      
+      <div class="ideas">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Ideas</div>
+        </div>
+
+        <div class="ideas-list"></div>
+      </div>
+      
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const response = await fetch('http://localhost:3000/ideas');
+          const ideas = await response.json();
+    
+          const ideasContainer = document.querySelector('.ideas .ideas-list');
+          ideas.forEach((idea) => {
+            const ideaElement = `
+              <div class="footer-info-wrapper">
+                <div class="div-wrapper">
+                  <div class="text-fields-wrapper">
+                    <div class="text-fields-user">
+                      <p class="applicant-details">
+                        Full Name: ${idea.fullName} <br>
+                        Email: ${idea.email} <br>
+                        Date submitted: ${new Date(idea.submittedAt).toLocaleDateString()} <br>
+                        Idea: <br>${idea.idea}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            ideasContainer.insertAdjacentHTML('beforeend', ideaElement);
+          });
+        } catch (error) {
+          console.error("Error fetching ideas:", error);
+          alert("Failed to fetch ideas.");
+        }
+      });
+    </script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Events</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap JavaScript Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <div class="element-events">
+      <div class="navigation"></div>
+
+      <div class="section">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Events</div>
+        </div>
+        <div class="green-margin">
+          <button class="green-button">
+            <a href="create-event.html" class="text-wrapper-5">Create Event</a>
+          </button>
+        </div>
+          <div class="body-text">
+          <div class="title">Upcoming Events</div>
+          <div class="u-row">
+            <div class="row" id="upcoming-events"></div>
+          </div>
+          
+          <div class="title">Past Events</div>
+          <div class="row" id="past-events"></div>
+        </div>
+      </div>
+
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fetch and Render Events -->
+    <script>
+      function formatDateTime(dateTime) {
+        const date = new Date(dateTime);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+
+        let hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // The hour '0' should be '12'
+
+        return `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+      }
+
+
+      document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/events');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch events: ${response.status}`);
+    }
+
+    const { upcomingEvents, pastEvents } = await response.json();
+
+    const createEventCard = (event) => `
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">${event.title}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">${event.subtitle}</h6>
+            <p class="card-text"><strong>Date & Time:</strong> ${formatDateTime(event.dateTime)}</p>
+            <p class="card-text"><strong>Location:</strong> ${event.location}</p>
+            <p class="card-text">${event.description}</p>
+            <div class="frame2">
+              <a href="edit-leader.html?id=${event._id}" class="button">
+                <div class="text-wrapper-5">Edit</div>
+              </a>
+              <button class="cancel-button" onclick="deleteEvent('${event._id}')">
+                <div class="text-wrapper-5">Delete</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const upcomingContainer = document.getElementById('upcoming-events');
+    const pastContainer = document.getElementById('past-events');
+
+    // Populate containers
+    upcomingContainer.innerHTML = upcomingEvents.map(createEventCard).join('');
+    pastContainer.innerHTML = pastEvents.map(createEventCard).join('');
+  } catch (error) {
+    console.error("Error fetching or rendering events:", error);
+  }
+});
+
+      async function deleteEvent(eventId) {
+        const userConfirmed = confirm("Are you sure you want to delete this event?");
+        if (!userConfirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/events/${eventId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                alert("Event deleted successfully!");
+                location.reload();
+            } else {
+                alert("Failed to delete event.");
+            }
+        } catch (error) {
+            console.error("Error deleting event:", error);
+            alert("An error occurred while deleting the event.");
+        }
+      }
+    </script>
+  </body>
+</html>

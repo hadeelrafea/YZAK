@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Request Form</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+  </head>
+  <body>
+    <div class="request-page">
+      <div class="navigation"></div>
+      <div class="section">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Request Form</div>
+        </div>
+        <div class="request-description">
+          <p class="description-text">
+            Submit your request to the leadership team for support or resources. Provide details to ensure efficient coordination and timely assistance.
+          </p>
+        </div>
+        <div class="form">
+          <div class="request-form">
+            <div class="form-fields">
+              <input id="requestTitle" class="input" placeholder="Request title" />
+              <select id="contactEmail" class="input">
+                <option value="" disabled selected>Select a leader</option>
+              </select>
+              
+              <textarea id="messageBody" class="input-message" placeholder="Type your message here"></textarea>
+              <button id="submitButton" class="button">
+                <span class="text-wrapper-5">Submit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.getElementById('submitButton').addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const requestTitle = document.getElementById('requestTitle').value.trim();
+        const contactEmail = document.getElementById('contactEmail').value.trim();
+        const messageBody = document.getElementById('messageBody').value.trim();
+
+        // Retrieve the logged-in user's email from sessionStorage
+        const userEmail = sessionStorage.getItem('userEmail');
+
+        // Validation: Check if all fields are filled
+        if (!requestTitle || !contactEmail || !messageBody) {
+          alert('Please fill out all fields before submitting.');
+          return;
+        }
+
+        // Validation: Check for valid email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(contactEmail)) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+
+        if (!userEmail) {
+          alert('User email is not available. Please log in.');
+          return;
+        }
+
+        try {
+          const response = await fetch('http://localhost:3000/send-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              requestTitle,
+              userEmail, // Send the logged-in user's email
+              contactEmail,
+              messageBody,
+            }),
+          });
+
+          if (response.ok) {
+            alert('Email sent successfully!');
+            document.getElementById('requestTitle').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('messageBody').value = '';
+          } else {
+            alert('Failed to send email.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred.');
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', async () => {
+  const dropdown = document.getElementById('contactEmail'); // Target dropdown
+
+  try {
+    const response = await fetch('http://localhost:3000/leaders'); // Fetch leaders
+    if (!response.ok) throw new Error('Failed to fetch leaders');
+
+    const leaders = await response.json();
+
+    // Populate the dropdown with leaders
+    leaders.forEach(leader => {
+      const option = document.createElement('option');
+      option.value = leader.email; // Set email as the value
+      option.textContent = `${leader.fullName} (${leader.email})`; // Display full name and email
+      dropdown.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error fetching leaders:', error);
+    alert('Failed to load leaders. Please try again later.');
+  }
+});
+
+    </script>
+  </body>
+</html>

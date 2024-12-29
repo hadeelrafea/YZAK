@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="navbar.js" defer></script>
+  </head>
+  <body>
+    <div class="element-applications">
+      <div class="navigation"></div>
+
+      <div class="section">
+        <div class="bio-text-wrapper">
+          <div class="bio-text">Applications</div>
+        </div>
+        <div class="footer-info-wrapper">
+          <div class="div-wrapper">
+            <div class="text-fields-wrapper">
+              <div class="text-fields">
+                <p class="applicant-details">
+                  Full Name: <br />Email: <br />Preferred Role:
+                  <br />Contribution:
+                </p>
+                <p class="hadeel-rafea">
+                  Hadeel Rafea<br />hadeelrafea@gmail.com<br />member<br />I can
+                  contribute to YZAK as i love volunteering.
+                </p>
+                <div class="frame">
+                  <button class="button">
+                    <div class="text-wrapper-5">Accept</div>
+                  </button>
+                  <button class="cancel-button">
+                    <div class="text-wrapper-5">Deny</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="global-footer">
+        <div class="footer-container">
+          <div class="footer-socials-wrapper">
+            <div class="footer-socials">
+              <div class="footer-title">Our Socials</div>
+              <div class="social-icons">
+                <a href="https://www.instagram.com/yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon instagram-icon" src="nstagram.png" alt="Instagram" />
+                </a>
+                <a href="https://www.tiktok.com/@yzak.bh" target="_blank" rel="noopener noreferrer">
+                  <img class="social-icon tiktok-icon" src="tik-tok.png" alt="TikTok" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const applicationsContainer = document.querySelector(
+          ".footer-info-wrapper"
+        );
+
+        try {
+          const response = await fetch("http://localhost:3000/applications");
+          const applications = await response.json();
+
+          applicationsContainer.innerHTML = ""; // Clear the container
+
+          applications.forEach((app) => {
+            const applicationHTML = `
+              <div class="div-wrapper">
+                <div class="text-fields-wrapper">
+                  <div class="text-fields-user">
+                    <p class="applicant-details">
+                      Full Name: ${app.fullName}<br />
+                      Email: ${app.email}<br />
+                      Preferred Role: ${app.role}<br />
+                      Contribution: ${app.contribution}
+                    </p>
+                    <div class="frame">
+                      <button class="button">
+                        <div class="text-wrapper-5">Accept</div>
+                        </button>
+                      <button class="cancel-button">
+                        <div class="text-wrapper-5">Deny</div>
+                        </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            applicationsContainer.insertAdjacentHTML(
+              "beforeend",
+              applicationHTML
+            );
+          });
+        } catch (error) {
+          console.error("Error fetching applications:", error);
+          alert("Failed to fetch applications.");
+        }
+      });
+    </script>
+  </body>
+</html>
